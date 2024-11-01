@@ -1,3 +1,7 @@
+Cypress.Commands.add('logStep', (message) => {
+    cy.task('log', message);
+});
+
 Cypress.Commands.add('loginByGoogleApi', () => {
     cy.log('Logging in to Google')
     cy.request({

@@ -24,22 +24,27 @@ describe('Google Login and Logout Test', () => {
     const password = Cypress.env('GOOGLE_PASSWORD');
 
     cy.visit(baseUrl);
-    cy.log('Página inicial acessada');
+    cy.logStep('Página inicial acessada');
 
     cy.get(selectors.loginButton)
       .should('be.visible')
       .click({ force: true });
-    cy.log('Botão de login clicado');
+    cy.logStep('Botão de login clicado');
 
     cy.get(selectors.signInWithGoogleButton)
       .should('be.visible')
       .click();
-    cy.log('Botão "Sign in with Google" clicado');
+    cy.logStep('Botão "Sign in with Google" clicado');
 
     cy.origin(
       googleLoginUrl,
       { args: { email, password, selectors } },
       ({ email, password, selectors }) => {
+        function logStep(step) {
+          cy.log(step);
+          console.log(step);
+        }
+
         Cypress.on('uncaught:exception', (err) => {
           if (
             err.message.includes('ResizeObserver loop completed with undelivered notifications') ||
@@ -52,30 +57,30 @@ describe('Google Login and Logout Test', () => {
         cy.get(selectors.googleEmailInput)
           .should('be.visible')
           .type(email);
-        cy.log('Email inserido');
+        logStep('Email inserido');
 
         cy.get(selectors.googleEmailNextButton)
           .should('be.visible')
           .click();
-        cy.log('Botão "Próxima" após o email clicado');
+        logStep('Botão "Próxima" após o email clicado');
 
         cy.get(selectors.googlePasswordInput, { timeout: 10000 })
           .should('be.visible')
           .type(password, { log: false });
-        cy.log('Senha inserida');
+        logStep('Senha inserida');
 
         cy.get(selectors.googlePasswordNextButton)
           .should('be.visible')
           .click();
-        cy.log('Botão "Próxima" após a senha clicado');
+        logStep('Botão "Próxima" após a senha clicada');
 
         cy.get(selectors.googleContinueButton, { timeout: 10000 })
           .then(($btn) => {
             if ($btn.is(':visible')) {
               cy.wrap($btn).click();
-              cy.log('Botão "Continue" clicado');
+              logStep('Botão "Continue" clicado');
             } else {
-              cy.log('Botão "Continue" não encontrado, prosseguindo');
+              logStep('Botão "Continue" não encontrado, prosseguindo');
             }
           });
       }
@@ -83,22 +88,22 @@ describe('Google Login and Logout Test', () => {
 
     cy.get(selectors.dashboardHeader, { timeout: 20000 })
       .should('be.visible');
-    cy.log('Acesso ao dashboard concluído com sucesso');
+    cy.logStep('Acesso ao dashboard concluído com sucesso');
 
-    cy.log('Iniciando logout');
+    cy.logStep('Iniciando logout');
 
     cy.get(selectors.userMenuToggle)
       .should('be.visible')
       .click();
-    cy.log('Menu do usuário aberto');
+    cy.logStep('Menu do usuário aberto');
 
     cy.get(selectors.logoutButton)
       .should('be.visible')
       .click();
-    cy.log('Botão de logout clicado');
+    cy.logStep('Botão de logout clicado');
 
     cy.get(selectors.loginButton)
       .should('be.visible');
-    cy.log('Usuário deslogado com sucesso');
+    cy.logStep('Usuário deslogado com sucesso');
   });
 });
