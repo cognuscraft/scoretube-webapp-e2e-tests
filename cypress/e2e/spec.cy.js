@@ -14,8 +14,8 @@ describe('Google Login and Logout Test', () => {
     userMenuToggle: 'label[data-cy="user-menu-toggle"]',
     logoutButton: 'div[data-cy="logout-button"]',
     sidebarCreditsBtn: 'a[data-cy="sidebar-credits-btn"]',
-    subscriptionBtn: 'button[data-cy="btnBuyMonthly"]',
-    priceRange: 'input[datacy="subscription-plans-price-range"]'
+    subscribeMonthlyBtn: 'button[data-cy="btnBuyMonthly"]',
+    rangeSlider: 'input[datacy="subscription-plans-price-range"]'
   };
 
   beforeEach(() => {
@@ -93,7 +93,26 @@ describe('Google Login and Logout Test', () => {
       .should('be.visible');
     cy.logStep('Acesso ao dashboard concluído com sucesso');
 
-    cy.logStep('Iniciando logout');
+    //FINANCEIRO
+
+    cy.get(selectors.sidebarCreditsBtn)
+      .should('be.visible')
+      .click();
+    cy.logStep('Clicado no botão de créditos no menu lateral da sidebar');
+
+    //alterando o range para a posição [1]
+    cy.get(selectors.rangeSlider)
+      .invoke('val', 1)
+      .trigger('input');
+    cy.logStep('Range deslizado para segundo preço do mais barato para o mais caro');
+
+    //clicando no botão de comprar
+    cy.get(selectors.subscribeMonthlyBtn)
+      .should('be.visible')
+      .click();
+    cy.logStep('Clicado no botão de créditos no menu lateral da sidebar');
+
+    cy.logStep('Clicado no botão de checkout');
 
     cy.get(selectors.userMenuToggle)
       .should('be.visible')
