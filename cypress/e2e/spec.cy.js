@@ -7,56 +7,50 @@ describe('Google Login and Logout Test', () => {
     const email = Cypress.env('GOOGLE_EMAIL');
     const password = Cypress.env('GOOGLE_PASSWORD');
 
-    // Visitar a página inicial
+    // ACESSAR A PÁGINA E AVANÇAR PARA O LOGIN
     cy.visit('http://localhost:3000')
       .log('Visited home page');
 
-    // Testar o botão com a classe 'token-string'
     cy.get('button[data-cy="header-login-btn-1"]')
       .should('be.visible')
       .click({ force: true })
       .log('Clicked login button with token-string class');
 
-    // Identificar e clicar no botão de login
     cy.contains('button', 'Sign in with Google')
       .should('be.visible')
       .click()
       .log('Clicked login button');
 
-    // Unificar o fluxo de e-mail e senha dentro de um único `cy.origin`
+    //SAIR DO AMBIENTE SCORETUBE E IR PARA O AMBIENTE GOOGLE
     cy.origin('https://accounts.google.com', { args: { email: String(email), password: String(password) } }, ({ email, password }) => {
 
-      // Ignorar o erro "ResizeObserver loop completed with undelivered notifications"
       Cypress.on('uncaught:exception', (err) => {
         if (
           err.message.includes('ResizeObserver loop completed with undelivered notifications') ||
           err.message.includes("Cannot read properties of null (reading 'postMessage')")
         ) {
-          return false; // Ignora os erros específicos
+          return false;
         }
       });
 
-      // Seleciona o campo de e-mail e insere o e-mail como string
+      //FAZER O LOGIN PELO GOOGLE
       cy.get('input[type="email"]')
         .should('be.visible')
         .click()
         .type(email)
         .log('Entered email');
 
-      // Clica no botão "Próximo"
       cy.get('button[type="button"]').contains('Próxima')
         .should('be.visible')
         .click()
         .log('Clicked Next button')
 
-      // Seleciona o primeiro campo de senha e insere a senha como string
       cy.get('input[type="password"]').first()
         .should('be.visible')
         .click()
         .type(password)
         .log('Entered password');
 
-      // Clica no botão "Próximo" para a senha, caso apareça
       cy.get('button[type="button"]').contains('Próxima')
         .should('be.visible')
         .click()
@@ -66,26 +60,27 @@ describe('Google Login and Logout Test', () => {
         .should('be.visible')
         .click()
         .log('Clicked Continue Button')
-      // Navega para o dashboard após a autenticação
     });
 
-    // Verificar se o texto "Painel de Análise de Vídeos" está presente
-    cy.contains('Painel de Análise de Vídeos');
-    cy.log('Found "Painel de Análise de Vídeos" text')
-    cy.log('Acesso ao dashboard concluido com sucesso')
+    //VERIFICAR SE ESTÁ NO DASHBOARD
+    cy.contains('Painel de Análise de Vídeos')
+      .log('Found "Painel de Análise de Vídeos" text')
+      .log('Acesso ao dashboard concluido com sucesso');
 
+    //FAZER O LOGOUT
     cy.log('Iniciando o logout')
 
     cy.get('label[data-cy="user-menu-toggle"]')
       .should('be.visible')
       .click()
-    cy.log("Clicked dropdown button")
+      .log("Clicked dropdown button")
 
     cy.get('div[data-cy="logout-button"]')
       .should('be.visible')
       .click()
-    cy.log("Clicked logout button")
+      .log("Clicked logout button")
 
+    //VERIFICAR SE DESLOGOU MESMO
     cy.get('button[data-cy="header-login-btn-1"]')
       .should('be.visible')
       .click({ force: true })
