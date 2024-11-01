@@ -10,15 +10,12 @@ describe('Google Login and Logout Test', () => {
     // Visitar a página inicial
     cy.visit('http://localhost:3000')
       .log('Visited home page');
-    console.log('Visited home page');
 
     // Testar o botão com a classe 'token-string'
-    cy.get('div.hidden.lg\\:block button[data-cy="login-button"]')
+    cy.get('button[data-cy="header-login-btn-1"]')
       .should('be.visible')
       .click({ force: true })
       .log('Clicked login button with token-string class');
-
-
 
     // Identificar e clicar no botão de login
     cy.contains('button', 'Sign in with Google')
@@ -70,23 +67,7 @@ describe('Google Login and Logout Test', () => {
         .click()
         .log('Clicked Continue Button')
       // Navega para o dashboard após a autenticação
-      cy.wait(30000)
-        .visit('http://localhost:3000')
     });
-
-
-
-    cy.get('div.hidden.lg\\:block button[data-cy="login-button"]')
-      .should('be.visible')
-      .click({ force: true })
-      .log('Clicked login button with token-string class');
-
-
-    cy.get('button[type="submit"]')
-      .should('be.visible')
-      .click({ force: true })
-      .log('Button clicked')
-
 
     // Verificar se o texto "Painel de Análise de Vídeos" está presente
     cy.contains('Painel de Análise de Vídeos');
@@ -105,7 +86,7 @@ describe('Google Login and Logout Test', () => {
       .click()
     cy.log("Clicked logout button")
 
-    cy.get('div.hidden.lg\\:block button[data-cy="login-button"]')
+    cy.get('button[data-cy="header-login-btn-1"]')
       .should('be.visible')
       .click({ force: true })
       .log('Clicked login button with token-string class');
