@@ -13,6 +13,9 @@ describe('Google Login and Logout Test', () => {
     dashboardHeader: 'h1:contains("Painel de Análise de Vídeos")',
     userMenuToggle: 'label[data-cy="user-menu-toggle"]',
     logoutButton: 'div[data-cy="logout-button"]',
+    sidebarCreditsBtn: 'a[data-cy="sidebar-credits-btn"]',
+    subscriptionBtn: 'button[data-cy="btnBuyMonthly"]',
+    priceRange: 'input[datacy="subscription-plans-price-range"]'
   };
 
   beforeEach(() => {
